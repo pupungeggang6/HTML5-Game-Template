@@ -50,7 +50,8 @@ function glInit() {
     gl.bindTexture(gl.TEXTURE_2D, texture)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 
     vao = gl.createVertexArray()
     vbo = gl.createBuffer(gl.ARRAY_BUFFER)
@@ -66,6 +67,6 @@ function glInit() {
     gl.enableVertexAttribArray(laPosition)
     gl.vertexAttribPointer(laColor, 3, gl.FLOAT, false, 8 * 4, 3 * 4)
     gl.enableVertexAttribArray(laColor)
-    gl.vertexAttribPointer(laTexcoord, 3, gl.FLOAT, false, 8 * 4, 6 * 4)
+    gl.vertexAttribPointer(laTexcoord, 2, gl.FLOAT, false, 8 * 4, 6 * 4)
     gl.enableVertexAttribArray(laTexcoord)
 }
