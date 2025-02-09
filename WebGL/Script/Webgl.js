@@ -4,9 +4,33 @@ const vSource = `#version 300 es
     in vec2 a_texcoord;
     out vec4 p_color;
     out vec2 p_texcoord;
-    
+    uniform float u_per[4];
+    uniform float u_view[6];
+
+    void glOrtho(in float v[6], out mat4 vm) {
+        vm = mat4(
+            2.0 / (v[1] - v[0]), 0.0, 0.0, 0.0,
+            0.0, 2.0 / (v[3] - v[2]), 0.0, 0.0,
+            0.0, 0.0, -2.0 / (v[5] - v[4]), 0.0,
+            -(v[1] + v[0]) / (v[1] - v[0]), -(v[3] + v[2]) / (v[3] - v[2]), -(v[5] + v[4]) / (v[5] - v[4]), 1.0
+        );
+    }
+
+    void gluPerspective(in float v[4], out mat4 vm) {
+        float c = 1.0 / tan(v[0] / 2.0);
+        vm = mat4(
+            c / v[1], 0.0, 0.0, 0.0,
+            0.0, c, 0.0, 0.0,
+            0.0, 0.0, (v[2] + v[3]) / (v[2] - v[3]), -1.0,
+            0.0, 0.0, 2.0 * v[2] * v[3] / (v[2] - v[3]), 0.0
+        );
+    }
+
     void main() {
-        gl_Position = a_position;
+        mat4 u_viewmat = mat4(1.0);
+        //glOrtho(u_view, u_viewmat);
+        gluPerspective(u_per, u_viewmat);
+        gl_Position = u_viewmat * a_position;
         p_color = a_color;
         p_texcoord = a_texcoord;
     }
@@ -45,6 +69,8 @@ function glInit() {
     laPosition = gl.getAttribLocation(program, 'a_position')
     laTexcoord = gl.getAttribLocation(program, 'a_texcoord')
     luMode = gl.getUniformLocation(program, 'u_mode')
+    luView = gl.getUniformLocation(program, 'u_view')
+    luPer = gl.getUniformLocation(program, 'u_per')
 
     texture = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_2D, texture)
@@ -59,9 +85,19 @@ function glInit() {
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo)
     gl.bufferData(gl.ARRAY_BUFFER,
         new Float32Array([
-            -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-            0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0,
-            0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0]),
+            //680.0, 440.0, 0.5, 1.0, 0.0, 0.0, 1.0, 1.0,
+            //680.0, 360.0, 0.5, 0.0, 1.0, 0.0, 1.0, 0.0,
+            //600.0, 440.0, 0.5, 0.0, 0.0, 1.0, 0.0, 1.0,
+            //600.0, 440.0, 0.5, 1.0, 0.0, 0.0, 0.0, 1.0,
+            //680.0, 360.0, 0.5, 0.0, 1.0, 0.0, 1.0, 0.0,
+            //600.0, 360.0, 0.5, 0.0, 0.0, 1.0, 0.0, 0.0
+            0.5, -0.5, -5.0, 1.0, 0.0, 0.0, 1.0, 1.0,
+            0.5, 0.5, -5.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+            -0.5, -0.5, -5.0, 0.0, 0.0, 1.0, 0.0, 1.0,
+            -0.5, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+            0.5, 0.5, -5.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+            -0.5, 0.5, -5.0, 0.0, 0.0, 1.0, 0.0, 0.0
+        ]),
     gl.STATIC_DRAW)
     gl.vertexAttribPointer(laPosition, 3, gl.FLOAT, false, 8 * 4, 0)
     gl.enableVertexAttribArray(laPosition)

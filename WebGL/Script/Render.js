@@ -21,6 +21,8 @@ function renderInit() {
     gl.bindTexture(gl.TEXTURE_2D, texture)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img.test)
     gl.uniform1i(luMode, 1)
+    gl.uniform1fv(luView, view)
+    gl.uniform1fv(luPer, per)
     gl.bindVertexArray(vao)
-    gl.drawArrays(gl.TRIANGLES, 0, 3)
+    gl.drawArrays(gl.TRIANGLES, 0, 6)
 }
