@@ -8,7 +8,7 @@
                 src: url('Font/neodgm.ttf');
             }
 
-            #Canvas {
+            #Screen {
                 border: 2px solid black;
                 position: absolute;
                 left: 0;
@@ -19,6 +19,12 @@
                 height: 96%;
             }
 
+            #Debug {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+
             body {
                 touch-action: none;
                 overscroll-behavior: none;
@@ -26,7 +32,7 @@
         </style>
     </head>
     <body>
-        <canvas id="Script" width="1280" height="800"></canvas>
+        <canvas id="Screen" width="1280" height="800"></canvas>
         <script src="Script/Asset.js"></script>
         <script src="Script/UI.js"></script>
         <script src="Script/Data.js"></script>
@@ -42,8 +48,13 @@
 
         <script src="Script/SceneTitle.js"></script>
 
+        <script src="Script/Debug.js"></script>
         <script src="Script/Main.js"></script>
 
-        <div id="Debug"></div>
+        <div id="Debug">
+            <input id="DT" type="text"></input>
+            <button onclick="debug()">Test</button>
+            <div id="DR"></div>
+        </div>
     </body>
 </html>
